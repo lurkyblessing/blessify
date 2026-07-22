@@ -1,0 +1,319 @@
+@font-face {
+    font-family: 'AstonScript';
+    src: url('./assets/fonts/Aston Script.ttf');
+}
+@font-face {
+    font-family: 'Maratre';
+    src: url('./assets/fonts/Maratre.otf');
+}
+@font-face {
+    font-family: 'MolliesScript';
+    src: url('./assets/fonts/MolliesScript-Regular-Exfont9d72.otf');
+}
+@font-face {
+    font-family: 'Exmouth';
+    src: url('./assets/fonts/exmouth_.ttf');
+}
+@font-face {
+    font-family: 'NoirAtelier';
+    src: url('./assets/fonts/noiratelier.otf');
+}
+
+:root {
+    --bg-color: #0d0c11; /* Very dark moody background */
+    --text-color: #f0e6d2;
+    --text-muted: #8b8793;
+    --glass-bg: rgba(35, 33, 43, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --accent: #c19065;
+    --accent-hover: #dfb38b;
+    --font-ui: 'Outfit', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-ui);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-image: radial-gradient(circle at top right, #1f1b29, transparent 40%),
+                      radial-gradient(circle at bottom left, #161423, transparent 50%);
+}
+
+.app-container {
+    width: 95vw;
+    height: 95vh;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 15px 0;
+}
+
+header h1 {
+    font-family: 'NoirAtelier', serif;
+    font-size: 3rem;
+    font-weight: normal;
+    letter-spacing: 2px;
+    background: linear-gradient(45deg, #f0e6d2, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 4px 20px rgba(193, 144, 101, 0.2);
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.editor-workspace {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    min-height: 0;
+}
+
+.canvas-container {
+    flex: 1;
+    position: relative;
+    border-radius: 16px;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
+}
+
+canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: filter 0.5s ease;
+}
+
+.upload-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.upload-btn {
+    background: var(--accent);
+    color: #111;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(193, 144, 101, 0.3);
+}
+
+.upload-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.drag-text {
+    margin-top: 15px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Interactive Elements Layer */
+.interactive-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Let clicks pass through initially */
+}
+.interactive-layer.active {
+    pointer-events: auto; 
+}
+
+.draggable-element {
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    pointer-events: auto;
+    border: 1px dashed transparent;
+    padding: 5px;
+    transform-origin: center center;
+}
+
+.draggable-element:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.draggable-element.selected {
+    border-color: var(--accent);
+}
+
+.draggable-text {
+    color: #fff;
+    white-space: nowrap;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.draggable-sticker svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.6));
+}
+
+.delete-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.draggable-element.selected .delete-btn {
+    display: flex;
+}
+
+/* Toolbar */
+.toolbar {
+    width: 280px;
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    overflow-y: auto;
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+.tool-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.tool-section h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 8px;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.action-btn.secondary {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+}
+.action-btn.secondary:hover {
+    color: var(--text-color);
+}
+
+.action-btn.primary {
+    background: var(--accent);
+    color: #111;
+    font-weight: 600;
+    margin-top: auto;
+}
+.action-btn.primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 0 15px rgba(193, 144, 101, 0.4);
+}
+
+.sticker-palette {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.sticker-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sticker-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--glass-border);
+    transform: scale(1.05);
+}
+
+.sticker-btn svg {
+    width: 30px;
+    height: 30px;
+    fill: #f0e6d2;
+}
+
+.hidden {
+    display: none !important;
+}
