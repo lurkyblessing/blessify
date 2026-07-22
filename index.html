@@ -4,48 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blessify - Aesthetic Picture Decorator</title>
-    <meta name="description" content="Decorate your pictures with a dark, moody aesthetic, vintage fonts, and stickers.">
+    <meta name="description" content="A premium picture decorator with a party girl aesthetic.">
     <link rel="stylesheet" href="index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
-        <header>
-            <h1>Blessify</h1>
-            <p>make your pics aesthetic</p>
+        
+        <header class="top-nav">
+            <div class="brand">
+                <h1>Blessify</h1>
+                <p>aesthetic studio</p>
+            </div>
+            <button class="action-btn primary" id="btnExport">Save Picture ✨</button>
         </header>
 
         <main class="editor-workspace">
-            <div class="canvas-container" id="canvasContainer">
-                <canvas id="mainCanvas"></canvas>
-                <div class="upload-overlay" id="uploadOverlay">
-                    <label for="imageUpload" class="upload-btn">Upload a Picture</label>
-                    <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/webp" hidden>
-                    <p class="drag-text">or drag and drop here</p>
-                </div>
-                <!-- Interactive Elements Layer (divs over canvas for easy dragging, before rendering to canvas on save) -->
-                <div id="interactiveLayer" class="interactive-layer hidden"></div>
-            </div>
-
-            <aside class="toolbar glass-panel">
+            
+            <aside class="sidebar left-sidebar glass-panel">
                 <div class="tool-section">
                     <h3>Filters</h3>
-                    <button class="action-btn" id="btnBlessify">Blessify Filter 🖤</button>
+                    <p class="tool-desc">Apply 2000s camera vibes</p>
+                    <button class="action-btn" id="btnBlessify">2000s Flash 📸</button>
                     <button class="action-btn secondary" id="btnResetFilter">Reset Filter</button>
                 </div>
 
                 <div class="tool-section">
-                    <h3>Decorate</h3>
+                    <h3>Typography</h3>
+                    <p class="tool-desc">Add aesthetic text overlays</p>
                     <button class="action-btn" id="btnAddText">Add Text 🔤</button>
+                </div>
+            </aside>
+
+            <div class="canvas-container" id="canvasContainer">
+                <div class="canvas-wrapper">
+                    <!-- The transparent checkerboard background -->
+                    <div class="canvas-background"></div>
+                    <canvas id="mainCanvas"></canvas>
+                    
+                    <!-- Interactive Elements Layer -->
+                    <div id="interactiveLayer" class="interactive-layer hidden"></div>
+
+                    <!-- Bulletproof Upload Overlay (Only visible before upload) -->
+                    <div class="upload-overlay" id="uploadOverlay">
+                        <div class="upload-content">
+                            <span class="upload-icon">✦</span>
+                            <h2>Upload a Picture</h2>
+                            <p>Click or drag and drop</p>
+                        </div>
+                        <input type="file" id="imageUpload" class="bulletproof-input" accept="image/png, image/jpeg, image/webp">
+                    </div>
+                </div>
+            </div>
+
+            <aside class="sidebar right-sidebar glass-panel">
+                <div class="tool-section">
+                    <h3>Stickers</h3>
+                    <p class="tool-desc">Stamp your aesthetic</p>
                     <div class="sticker-palette" id="stickerPalette">
                         <!-- Stickers populated by JS -->
                     </div>
                 </div>
-
-                <div class="tool-section export-section">
-                    <button class="action-btn primary" id="btnExport">Save Picture ✨</button>
-                </div>
             </aside>
+            
         </main>
     </div>
     
