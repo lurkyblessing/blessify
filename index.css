@@ -20,14 +20,15 @@
 }
 
 :root {
-    --bg-color: #0d0c11; /* Very dark moody background */
-    --text-color: #f0e6d2;
-    --text-muted: #8b8793;
-    --glass-bg: rgba(35, 33, 43, 0.45);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    --accent: #c19065;
-    --accent-hover: #dfb38b;
+    --bg-color: #050505; /* Deep black */
+    --text-color: #f5f5f5;
+    --text-muted: #a0a0a0;
+    --glass-bg: rgba(20, 20, 20, 0.7);
+    --glass-border: rgba(255, 20, 147, 0.3); /* Pink border */
+    --glass-shadow: 0 8px 32px 0 rgba(255, 0, 60, 0.2); /* Reddish shadow */
+    --accent-pink: #ff1493; /* Deep pink */
+    --accent-red: #ff003c; /* Bright red */
+    --accent-hover: #ff66b2; /* Lighter pink */
     --font-ui: 'Outfit', sans-serif;
 }
 
@@ -46,8 +47,9 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background-image: radial-gradient(circle at top right, #1f1b29, transparent 40%),
-                      radial-gradient(circle at bottom left, #161423, transparent 50%);
+    background-image: radial-gradient(circle at top right, rgba(255, 20, 147, 0.15), transparent 50%),
+                      radial-gradient(circle at bottom left, rgba(255, 0, 60, 0.15), transparent 50%),
+                      repeating-linear-gradient(45deg, #0a0a0a 0, #0a0a0a 2px, transparent 2px, transparent 8px); /* subtle grid for 2000s feel */
 }
 
 .app-container {
@@ -66,19 +68,24 @@ header {
 
 header h1 {
     font-family: 'NoirAtelier', serif;
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: normal;
     letter-spacing: 2px;
-    background: linear-gradient(45deg, #f0e6d2, var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0px 4px 20px rgba(193, 144, 101, 0.2);
+    color: #fff;
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px var(--accent-pink),
+        0 0 40px var(--accent-pink),
+        0 0 80px var(--accent-red); /* Neon glow */
+    margin-bottom: 5px;
 }
 
 header p {
     color: var(--text-muted);
     font-size: 0.9rem;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .editor-workspace {
@@ -92,13 +99,13 @@ header p {
     flex: 1;
     position: relative;
     border-radius: 16px;
-    background: #000;
+    background: #111;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
+    border: 2px solid var(--glass-border);
 }
 
 canvas {
@@ -115,32 +122,36 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
     z-index: 10;
     transition: opacity 0.3s ease;
 }
 
 .upload-btn {
-    background: var(--accent);
-    color: #111;
-    padding: 12px 24px;
+    background: linear-gradient(45deg, var(--accent-red), var(--accent-pink));
+    color: #fff;
+    padding: 15px 30px;
     border-radius: 30px;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.1rem;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(193, 144, 101, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
 }
 
 .upload-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 20, 147, 0.6);
 }
 
 .drag-text {
     margin-top: 15px;
-    color: var(--text-muted);
+    color: #fff;
     font-size: 0.9rem;
+    opacity: 0.7;
 }
 
 /* Interactive Elements Layer */
@@ -149,7 +160,7 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    pointer-events: none; /* Let clicks pass through initially */
+    pointer-events: none;
 }
 .interactive-layer.active {
     pointer-events: auto; 
@@ -166,41 +177,50 @@ canvas {
 }
 
 .draggable-element:hover {
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .draggable-element.selected {
-    border-color: var(--accent);
+    border-color: var(--accent-pink);
+    border-style: solid;
+    background: rgba(255, 20, 147, 0.1);
 }
 
 .draggable-text {
     color: #fff;
     white-space: nowrap;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    text-shadow: 
+        2px 2px 0 #000, 
+        -1px -1px 0 var(--accent-pink), 
+        1px -1px 0 var(--accent-pink), 
+        -1px 1px 0 var(--accent-pink), 
+        1px 1px 0 var(--accent-pink); /* 2000s pop outline effect */
 }
 
 .draggable-sticker svg {
     width: 100%;
     height: 100%;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.6));
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
 }
 
 .delete-btn {
     position: absolute;
     top: -10px;
     right: -10px;
-    background: #ff4757;
-    color: white;
-    border: none;
+    background: #fff;
+    color: var(--accent-red);
+    border: 2px solid var(--accent-red);
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
     display: none;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+    z-index: 100;
 }
 
 .draggable-element.selected .delete-btn {
@@ -209,7 +229,7 @@ canvas {
 
 /* Toolbar */
 .toolbar {
-    width: 280px;
+    width: 300px;
     padding: 20px;
     border-radius: 16px;
     display: flex;
@@ -220,8 +240,8 @@ canvas {
 
 .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
 }
@@ -233,33 +253,35 @@ canvas {
 }
 
 .tool-section h3 {
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--glass-border);
+    letter-spacing: 2px;
+    color: #fff;
+    border-bottom: 2px solid var(--accent-pink);
     padding-bottom: 8px;
 }
 
 .action-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-color);
-    padding: 10px 15px;
+    background: rgba(255, 20, 147, 0.1);
+    border: 1px solid var(--accent-pink);
+    color: #fff;
+    padding: 12px 15px;
     border-radius: 8px;
     cursor: pointer;
     font-family: var(--font-ui);
-    font-size: 0.9rem;
+    font-size: 1rem;
     transition: all 0.2s ease;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
+    font-weight: 600;
 }
 
 .action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 20, 147, 0.3);
+    box-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+    transform: scale(1.02);
 }
 
 .action-btn.secondary {
@@ -267,21 +289,26 @@ canvas {
     padding: 8px 12px;
     color: var(--text-muted);
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
 }
 .action-btn.secondary:hover {
-    color: var(--text-color);
+    color: #fff;
+    border-color: rgba(255,255,255,0.2);
 }
 
 .action-btn.primary {
-    background: var(--accent);
-    color: #111;
-    font-weight: 600;
+    background: linear-gradient(45deg, var(--accent-red), var(--accent-pink));
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
     margin-top: auto;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(255, 0, 60, 0.4);
 }
 .action-btn.primary:hover {
-    background: var(--accent-hover);
-    box-shadow: 0 0 15px rgba(193, 144, 101, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 60, 0.6);
 }
 
 .sticker-palette {
@@ -291,8 +318,8 @@ canvas {
 }
 
 .sticker-btn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 20, 147, 0.3);
     border-radius: 8px;
     padding: 10px;
     cursor: pointer;
@@ -303,15 +330,15 @@ canvas {
 }
 
 .sticker-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--glass-border);
-    transform: scale(1.05);
+    background: rgba(255, 20, 147, 0.2);
+    border-color: var(--accent-pink);
+    transform: scale(1.1);
 }
 
 .sticker-btn svg {
-    width: 30px;
-    height: 30px;
-    fill: #f0e6d2;
+    width: 35px;
+    height: 35px;
+    fill: #fff;
 }
 
 .hidden {

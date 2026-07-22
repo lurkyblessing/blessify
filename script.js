@@ -21,18 +21,18 @@ const fonts = [
     'NoirAtelier'
 ];
 
-// Aesthetic SVGs for stickers
+// Y2K / Party Girl Aesthetic SVGs for stickers
 const stickers = [
     // Sparkle
     `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C12 6.62742 17.3726 12 24 12C17.3726 12 12 17.3726 12 24C12 17.3726 6.62742 12 0 12C6.62742 12 12 6.62742 12 0Z"/></svg>`,
-    // Star / Cross
-    `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z"/></svg>`,
-    // Moon
-    `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+    // Star (Solid)
+    `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>`,
+    // Lips/Kiss
+    `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.5C12 21.5 4 15.5 3 13C2 10.5 4.5 8 7 9.5C8 10.1 10 11.5 12 12.5C14 11.5 16 10.1 17 9.5C19.5 8 22 10.5 21 13C20 15.5 12 21.5 12 21.5Z"/><path d="M12 15C9 14 6 13.5 3 13C6 11 9 12 12 12.5C15 12 18 11 21 13C18 13.5 15 14 12 15Z" fill="#ff1493"/></svg>`,
     // Heart
     `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
-    // Rose (simplified)
-    `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 2 4 5 4 9C4 13.5 12 22 12 22C12 22 20 13.5 20 9C20 5 16 2 12 2ZM12 6C13.1 6 14 6.9 14 8C14 9.1 13.1 10 12 10C10.9 10 10 9.1 10 8C10 6.9 10.9 6 12 6Z"/></svg>`,
+    // Butterfly
+    `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M22 6C20 4 16 3 12 9C8 3 4 4 2 6C0 8 1 12 5 13C3 15 2 19 5 21C8 23 11 19 12 17C13 19 16 23 19 21C22 19 21 15 19 13C23 12 24 8 22 6ZM12 15C11 12 11 10 12 7C13 10 13 12 12 15Z"/></svg>`,
     // Diamond
     `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 12L12 22L22 12L12 2Z"/></svg>`
 ];
@@ -53,14 +53,14 @@ function init() {
 imageUpload.addEventListener('change', handleImageUpload);
 uploadOverlay.addEventListener('dragover', (e) => {
     e.preventDefault();
-    uploadOverlay.style.background = 'rgba(255, 255, 255, 0.1)';
+    uploadOverlay.style.background = 'rgba(0, 0, 0, 0.8)';
 });
 uploadOverlay.addEventListener('dragleave', (e) => {
-    uploadOverlay.style.background = 'var(--glass-bg)';
+    uploadOverlay.style.background = 'rgba(0, 0, 0, 0.6)';
 });
 uploadOverlay.addEventListener('drop', (e) => {
     e.preventDefault();
-    uploadOverlay.style.background = 'var(--glass-bg)';
+    uploadOverlay.style.background = 'rgba(0, 0, 0, 0.6)';
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         loadImage(e.dataTransfer.files[0]);
     }
@@ -78,7 +78,9 @@ function loadImage(file) {
         const img = new Image();
         img.onload = function() {
             currentImage = img;
+            // FIX: properly hide the upload overlay and show the interactive layer
             uploadOverlay.classList.add('hidden');
+            interactiveLayer.classList.remove('hidden');
             interactiveLayer.classList.add('active');
             renderCanvas();
         }
@@ -119,10 +121,9 @@ function renderCanvas() {
     canvas.style.filter = currentFilter;
 }
 
-// Filter Logic (Dark & Moody instead of full sepia)
+// Filter Logic: 2000s digital camera vibe (high contrast, vivid, slight magenta/warm shift)
 btnBlessify.addEventListener('click', () => {
-    // A dark, contrasty, slightly warm filter
-    currentFilter = 'brightness(0.85) contrast(1.15) sepia(0.2) saturate(0.9)';
+    currentFilter = 'contrast(1.4) brightness(1.1) saturate(1.5) sepia(0.3) hue-rotate(-15deg)';
     renderCanvas();
 });
 
@@ -239,6 +240,10 @@ btnAddText.addEventListener('click', () => {
     textEl.style.fontFamily = randomFont;
     textEl.style.fontSize = '48px';
     
+    // Assign a random neon color (pink or white or light red)
+    const colors = ['#ffffff', '#ff1493', '#ff003c', '#ff66b2'];
+    textEl.style.color = colors[Math.floor(Math.random() * colors.length)];
+    
     // Center it initially
     textEl.style.transform = \`translate(0px, 0px) scale(1)\`;
     textEl.dataset.scale = 1;
@@ -262,7 +267,9 @@ function addSticker(index) {
     
     stickerEl.style.width = '80px';
     stickerEl.style.height = '80px';
-    stickerEl.style.color = '#fff';
+    // Randomly color the sticker in party aesthetic
+    const colors = ['#ffffff', '#ff1493', '#ff003c', '#ff66b2'];
+    stickerEl.style.color = colors[Math.floor(Math.random() * colors.length)];
     
     stickerEl.style.transform = \`translate(0px, 0px) scale(1)\`;
     stickerEl.dataset.scale = 1;
@@ -298,69 +305,45 @@ btnExport.addEventListener('click', () => {
     
     // 2. Draw interactive elements
     const elements = interactiveLayer.querySelectorAll('.draggable-element');
-    elements.forEach(el => {
-        const style = window.getComputedStyle(el);
-        const matrix = new DOMMatrixReadOnly(style.transform);
-        const tx = matrix.m41;
-        const ty = matrix.m42;
-        const scale = parseFloat(el.dataset.scale || 1);
-        
-        // Calculate center of element relative to interactiveLayer
-        const rect = el.getBoundingClientRect();
-        const layerRect = interactiveLayer.getBoundingClientRect();
-        
-        const centerX = (rect.left - layerRect.left) + rect.width / 2;
-        const centerY = (rect.top - layerRect.top) + rect.height / 2;
-        
-        eCtx.save();
-        eCtx.translate(centerX, centerY);
-        
-        if (el.classList.contains('draggable-text')) {
-            eCtx.scale(scale, scale);
-            eCtx.font = \`\${style.fontSize} \${style.fontFamily}\`;
-            eCtx.fillStyle = style.color;
-            eCtx.textAlign = 'center';
-            eCtx.textBaseline = 'middle';
-            
-            // Add slight shadow to match CSS
-            eCtx.shadowColor = 'rgba(0,0,0,0.8)';
-            eCtx.shadowBlur = 4;
-            eCtx.shadowOffsetX = 2;
-            eCtx.shadowOffsetY = 2;
-            
-            // Note: childNodes[0] is the text node, because childNodes[1] is the delete button
-            eCtx.fillText(el.childNodes[0].textContent, 0, 0);
-        } else if (el.classList.contains('draggable-sticker')) {
-            // Draw SVG to canvas
-            const svgStr = new XMLSerializer().serializeToString(el.querySelector('svg'));
-            const img = new Image();
-            const svg = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
-            const url = DOMURL.createObjectURL(svg);
-            
-            // Wait for image to load before drawing (requires async handling, but since it's a blob it's usually instant, 
-            // though to be perfectly safe we should do it async. For a simple app, we can use a callback approach).
-            // To keep the export sync for this version, we will just use it. If it fails, we need async.
-        }
-        
-        eCtx.restore();
-    });
     
     // To properly export SVGs we need an async approach.
     async function exportFinal() {
         for (let el of elements) {
-            if (el.classList.contains('draggable-sticker')) {
-                const style = window.getComputedStyle(el);
-                const scale = parseFloat(el.dataset.scale || 1);
+            const style = window.getComputedStyle(el);
+            const matrix = new DOMMatrixReadOnly(style.transform);
+            const scale = parseFloat(el.dataset.scale || 1);
+            
+            // Calculate center of element relative to interactiveLayer
+            const rect = el.getBoundingClientRect();
+            const layerRect = interactiveLayer.getBoundingClientRect();
+            
+            const centerX = (rect.left - layerRect.left) + rect.width / 2;
+            const centerY = (rect.top - layerRect.top) + rect.height / 2;
+
+            if (el.classList.contains('draggable-text')) {
+                eCtx.save();
+                eCtx.translate(centerX, centerY);
+                eCtx.scale(scale, scale);
+                eCtx.font = \`\${style.fontSize} \${style.fontFamily}\`;
+                eCtx.fillStyle = style.color;
+                eCtx.textAlign = 'center';
+                eCtx.textBaseline = 'middle';
                 
-                const rect = el.getBoundingClientRect();
-                const layerRect = interactiveLayer.getBoundingClientRect();
-                const centerX = (rect.left - layerRect.left) + rect.width / 2;
-                const centerY = (rect.top - layerRect.top) + rect.height / 2;
-                
+                // Pop outline effect for 2000s text
+                eCtx.lineWidth = 3;
+                eCtx.strokeStyle = '#ff1493';
+                if(style.color === 'rgb(255, 20, 147)') eCtx.strokeStyle = '#ffffff';
+                eCtx.strokeText(el.childNodes[0].textContent, 0, 0);
+                eCtx.fillText(el.childNodes[0].textContent, 0, 0);
+                eCtx.restore();
+            } else if (el.classList.contains('draggable-sticker')) {
                 const svg = el.querySelector('svg');
                 // Ensure SVG has intrinsic size for canvas drawing
                 if(!svg.getAttribute('width')) svg.setAttribute('width', rect.width / scale);
                 if(!svg.getAttribute('height')) svg.setAttribute('height', rect.height / scale);
+                
+                // Apply color to SVG before serializing
+                svg.style.color = style.color;
                 
                 const svgStr = new XMLSerializer().serializeToString(svg);
                 
@@ -370,7 +353,7 @@ btnExport.addEventListener('click', () => {
                         eCtx.save();
                         eCtx.translate(centerX, centerY);
                         eCtx.scale(scale, scale);
-                        eCtx.shadowColor = 'rgba(0,0,0,0.6)';
+                        eCtx.shadowColor = 'rgba(0,0,0,0.8)';
                         eCtx.shadowBlur = 4;
                         eCtx.shadowOffsetX = 2;
                         eCtx.shadowOffsetY = 2;
